@@ -7,4 +7,5 @@ router.get('/despesas', controller.getAllDespesas);
 router.get('/despesas/:id', controller.getDespesasByID);
 router.post('/despesas', controller.addDespesa);
 router.delete('/despesas/:id', controller.deleteDespesa);
+router.put('/despesas/:id', controller.editeDespesa);
 module.exports = router;

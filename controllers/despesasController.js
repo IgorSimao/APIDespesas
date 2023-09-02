@@ -3,6 +3,7 @@ let despesas = [
     {id: 2, nome: "Gasolina", valor: 300}
 ]
 module.exports = {
+    
     getAllDespesas : function(req, res, next){
         res.setHeader("content-type", "application/json");
         res.status(200).json(despesas);
@@ -58,5 +59,39 @@ module.exports = {
                }
                return res.status(404).json({error: "O ID informado não existe!"});
         }
+    },
+    editeDespesa : function(req, res, next){
+        let id = req.params.id
+        if (id != "" && id != undefined){
+            for(i = 0; i < despesas.length; i++){
+                if(id == despesas[i].id){
+                    
+                    let novoNome = req.body.nome;
+                    let novoValor = req.body.valor;
+                    //corrigir amanha essa validação para alterar somente o campo que houve alteração
+
+                    if (novoNome != "" && novoNome != undefined &&  novoValor == undefined){
+                        despesas[i].nome = novoNome;
+                        return res.status(200).json(despesas[i])
+                    }
+                    else if(novoValor != "" && novoValor != undefined && novoNome == undefined){
+                        despesas[i].valor = novoValor;
+                        return res.status(200).json(despesas[i])
+
+                    }else if(novoNome != "" && novoNome != undefined && novoValor != "" && novoValor != undefined){
+
+                        despesas[i].nome = novoNome;
+                        despesas[i].valor = novoValor;
+                        return res.status(200).json(despesas[i])
+
+                    }else{
+                        return res.status(400).json({Erro: "Informe o novo nome e/ou novo valor da despesa!"})
+                    }
+                    
+                }
+            }
+            return res.status(400).json({Erro: "ID não cadastrado não permite alteração!"})
+        }
+        return res.status(400).json({Erro: "Informe o ID a ser alterado!"})
     }
 }
