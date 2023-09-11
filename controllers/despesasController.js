@@ -1,6 +1,6 @@
 let despesas = [
-    {id: 1, nome: "Alugel", valor: 800},
-    {id: 2, nome: "Gasolina", valor: 300}
+    {id: 1, nome: "Alugel", categoria: "Moradia", valor: 800},
+    {id: 2, nome: "Gasolina", categoria: "Mobilidade", valor: 300}
 ]
 module.exports = {
     
@@ -32,12 +32,18 @@ module.exports = {
         }
         let nome  = req.body.nome;
         let valor  = req.body.valor;
+        let categoria  = req.body.categoria;
+        if(categoria == undefined){
+            categoria = "Outros"
+        }
 
         if (nome != "" && nome != undefined && valor != "" && valor != undefined){
             let despesa = {
                 id : id,
                 nome: nome,
+                categoria: categoria,
                 valor: valor
+                
             }
 
             despesas.push(despesa)
@@ -68,26 +74,41 @@ module.exports = {
                     
                     let novoNome = req.body.nome;
                     let novoValor = req.body.valor;
-                    //corrigir amanha essa validação para alterar somente o campo que houve alteração
+                    let novaCategoria = req.body.categoria;
 
-                    if (novoNome != "" && novoNome != undefined &&  novoValor == undefined){
-                        despesas[i].nome = novoNome;
-                        return res.status(200).json(despesas[i])
-                    }
-                    else if(novoValor != "" && novoValor != undefined && novoNome == undefined){
-                        despesas[i].valor = novoValor;
-                        return res.status(200).json(despesas[i])
 
-                    }else if(novoNome != "" && novoNome != undefined && novoValor != "" && novoValor != undefined){
+                    // if (novoNome != "" && novoNome != undefined &&  novoValor == undefined){
+                    //     despesas[i].nome = novoNome;
+                    //     return res.status(200).json(despesas[i])
+                    // }
+                    // else if(novoValor != "" && novoValor != undefined && novoNome == undefined){
+                    //     despesas[i].valor = novoValor;
+                    //     return res.status(200).json(despesas[i])
 
-                        despesas[i].nome = novoNome;
-                        despesas[i].valor = novoValor;
-                        return res.status(200).json(despesas[i])
+                    // }else if(novoNome != "" && novoNome != undefined && novoValor != "" && novoValor != undefined){
 
-                    }else{
-                        return res.status(400).json({Erro: "Informe o novo nome e/ou novo valor da despesa!"})
-                    }
+                    //     despesas[i].nome = novoNome;
+                    //     despesas[i].valor = novoValor;
+                    //     return res.status(200).json(despesas[i])
+
+                    // }else{
+                    //     return res.status(400).json({Erro: "Informe o novo nome e/ou novo valor da despesa!"})
+                    // }
                     
+
+                    if(novoNome !== "" && novoNome !== undefined){
+                        despesas[i].nome = novoNome;
+                    }
+
+                    if (novoValor !== "" && novoValor !== undefined){
+                        despesas[i].valor = novoValor;
+                    }
+
+                    if (novaCategoria !== "" && novaCategoria !== undefined){
+                        despesas[i].categoria = novaCategoria;
+                    }
+
+                    return res.status(200).json(despesas[i])
                 }
             }
             return res.status(400).json({Erro: "ID não cadastrado não permite alteração!"})
