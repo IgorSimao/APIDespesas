@@ -6,6 +6,7 @@ const connection = require("./config/database.js")();
 
 var indexRouter = require('./routes/index');
 var despesasRouter = require('./routes/despesasRouter');
+var usuarioRouter = require('./routes/usuarioRouter')
 
 var app = express();
 
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/', despesasRouter);
+app.use('/', usuarioRouter)
 
 app.use((req, res, next) => {
     const erro = new Error("Não encontrado");

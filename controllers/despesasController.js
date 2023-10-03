@@ -89,7 +89,7 @@ module.exports = {
         let id = req.params.id
         Despesa.findByIdAndRemove(id).then(despesa => {
             res.setHeader("content-type", "application/json");
-            res.status(200).json({msg : "Despesa removida!"}, );
+            res.status(200).json({msg : "Despesa removida!", despesa});
     })
     .catch(error => {
         return res.status(404).json({error: "O ID informado não existe!"});
