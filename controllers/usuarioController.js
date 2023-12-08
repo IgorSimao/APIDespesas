@@ -1,6 +1,8 @@
 const User = require("../model/usuario");
 require("../config/database")();
 const crypto = require('crypto-js');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../config/auth.json');
 
 // Chave secreta para criptografia (deve ser mantida em segredo)
 const encryptionKey = '5vG43yqz1xIW';
@@ -110,6 +112,42 @@ module.exports = {
                 res.status(404).json({error: "Senha Atual Incorreta"});
             }
         }).catch(error => {res.status(404).json({error: "Usuario não encontrado", error});})
+    },
+    usuarioVerificaCredenciais: async function(email, senha) {
+        try {
+            // Use async/await para esperar pela resolução da Promise
+            const user = await User.findOne({ email: email });
+            // Se não houver resultados
+            if (!user) {
+                console.log("Usuário não encontrado");
+                return false;
+            }
+    
+            // Verifique as credenciais
+            const usuarioEmail = user.email;
+            const usuarioSenha = user.senha;
+    
+            if (usuarioEmail == email) {
+                console.log("Verificação de email bem-sucedida");
+                const senhaAtualDescriptografada = decryptData(usuarioSenha);
+    
+                if (senhaAtualDescriptografada == senha) {
+                    console.log("Verificação de senha bem-sucedida");
+                    
+                    token = this.generateToken({id: User.id})
+                    return token;
+                } else {
+                    console.log("Senha incorreta");
+                    return false;
+                }
+            } else {
+                console.log("Email incorreto");
+                return false;
+            }
+        } catch (error) {
+            console.error("Erro ao verificar credenciais:", error);
+            return false;
+        }
     }
 }
 
